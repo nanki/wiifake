@@ -36,8 +36,9 @@ class MyReceiver < Wii::Receiver
 
     @status.isEnabled = 1
     @status.isDataValid = 1
-    @status.isBrowsing = 1
+    @status.isBrowsing = 0
     @status.dpdValidity = 1
+    @status.hold = 0
   end
 
   def accelerationChanged_accX_accY_accZ(type, ax, ay, az)
@@ -83,11 +84,9 @@ class MyReceiver < Wii::Receiver
     end
     
     return unless btn
-    @status.hold ||= btn
-    unless is_pressed
-      @status.hold ^= btn
-    end
-    send if rand < 0.1
+    @status.hold |= btn
+    @status.hold ^= btn if is_pressed.zero?
+    send
   end
 
   def send

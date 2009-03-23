@@ -2,8 +2,10 @@ if(typeof deconcept=="undefined"){var deconcept=new Object();}if(typeof deconcep
 
 (function() {
   function saferJSON(json) {
-    if (json.match(/^{([A-Za-z]+:[A-Za-z0-9.-]+,)*([A-Za-z]+:[A-Za-z0-9.-]+)}$/)) {
+    if (json && json.match(/^{([A-Za-z]+:[A-Za-z0-9.-]+,)*([A-Za-z]+:[A-Za-z0-9.-]+)}$/)) {
       return eval("("+json+")");
+    } else {
+      return {};
     }
   }
 
@@ -27,11 +29,10 @@ if(typeof deconcept=="undefined"){var deconcept=new Object();}if(typeof deconcep
 
   window.opera.wiiremote = {
     update: function(i) {
-      if (i == 0) {
+      if (i == 0 && typeof wii.updateWiiStatus == 'function') {
         return saferJSON(wii.updateWiiStatus());
-      } else {
-        return {};
       }
+      return {};
     }
   };
 })()
